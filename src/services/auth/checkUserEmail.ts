@@ -1,6 +1,10 @@
 import { User } from "../../models";
 
-export const checkUserEmail = async (email: string) => {
+import { UserI } from "../../interfaces";
+
+export const checkUserEmail = async (
+  email: string
+): Promise<UserI | undefined | null> => {
   try {
     const user = await User.findOne({ email });
     return user;

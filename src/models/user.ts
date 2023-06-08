@@ -2,6 +2,8 @@ import { Schema, model } from "mongoose";
 
 import Joi from "joi";
 
+import { UserI } from "../interfaces";
+
 /* eslint-disable no-useless-escape */
 const emailRegexp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -43,7 +45,7 @@ const userSchema = new Schema(
   { versionKey: false }
 );
 
-const User = model("user", userSchema);
+const User = model<UserI>("user", userSchema);
 
 const joiSchemaUser = Joi.object({
   email: Joi.string()
@@ -58,4 +60,12 @@ const joiSchemaUser = Joi.object({
     .required(),
 });
 
-export { User, joiSchemaUser };
+const joiSchemaVerifyEmail = Joi.object({
+  email: Joi.string()
+    .max(80)
+    .trim()
+    .regex(emailRegexp, "Invalid email address")
+    .required(),
+});
+
+export { User, joiSchemaUser, joiSchemaVerifyEmail };

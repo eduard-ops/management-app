@@ -1,22 +1,12 @@
 import { User } from "../../models";
 
-import { Document } from "mongoose";
+import { UserI } from "../../interfaces";
 
-interface UserDocument extends Document {
-  email: string;
-}
-
-type signupType = (
+export const signupUser = async (
   email: string,
   password: string,
-  verifyToken: string
-) => Promise<any> | undefined;
-
-export const signupUser: signupType = async (
-  email,
-  password,
-  verificationToken
-) => {
+  verificationToken: string
+): Promise<UserI | undefined> => {
   try {
     const user = await User.create({ email, password, verificationToken });
     return user;
