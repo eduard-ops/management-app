@@ -4,4 +4,4 @@ export { sendVerifyMail } from "./sendVerifyMail";
 
 export { generateTokens } from "./generateTokens";
 
-import { mailMessage } from "./mailMessage";
+export { mailMessage } from "./mailMessage";
