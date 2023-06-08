@@ -1,15 +1,13 @@
+import { Types } from "mongoose";
 import { User } from "../../models";
 
-export const verificationMail = async (email: string) => {
+export const verificationMail = async (id: Types.ObjectId) => {
   try {
-    await User.findOneAndUpdate(
-      { email },
-      {
-        verifyEmail: true,
-        verifyCode: null,
-        varifyTime: null,
-      }
-    );
+    const data = await User.findByIdAndUpdate(id, {
+      verifyEmail: true,
+      verificationToken: null,
+    });
+    return data;
   } catch (error) {
     console.log(error);
   }

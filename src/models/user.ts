@@ -34,14 +34,9 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    verifyCode: {
-      type: Number,
-      required: [true, "Verify code is required"],
-      default: null,
-    },
-    varifyTime: {
-      type: Number,
-      required: [true, "Verify time is required"],
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
       default: null,
     },
   },
@@ -63,21 +58,4 @@ const joiSchemaUser = Joi.object({
     .required(),
 });
 
-const joiSchemaVerifyCode = Joi.object({
-  email: Joi.string()
-    .max(80)
-    .trim()
-    .regex(emailRegexp, "Invalid email address")
-    .required(),
-  verifyCode: Joi.number().required(),
-});
-
-const joiSchemaVerify = Joi.object({
-  email: Joi.string()
-    .max(80)
-    .trim()
-    .regex(emailRegexp, "Invalid email address")
-    .required(),
-});
-
-export { User, joiSchemaUser, joiSchemaVerifyCode, joiSchemaVerify };
+export { User, joiSchemaUser };

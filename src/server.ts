@@ -2,11 +2,16 @@ import { app } from "./app";
 
 import mongoose from "mongoose";
 
-const { PORT = 4000, DB_HOST = "" } = process.env;
+import config from "./config";
 
-const starttServer = async () => {
+const {
+  database: { DB_HOST },
+  port: PORT = 3000,
+} = config;
+
+const startServer = async () => {
   try {
-    await mongoose.connect(DB_HOST);
+    await mongoose.connect(DB_HOST!);
     app.listen(PORT, () =>
       console.log(
         `The database is connected, the application is running on port ${PORT}`
@@ -20,4 +25,4 @@ const starttServer = async () => {
   }
 };
 
-starttServer();
+startServer();

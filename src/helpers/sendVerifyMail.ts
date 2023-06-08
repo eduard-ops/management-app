@@ -1,45 +1,59 @@
 import nodemailer from "nodemailer";
 
-import dotenv from "dotenv";
+import { mailMessage } from "./mailMessage";
 
-dotenv.config();
+import config from "../config";
 
-const { META_PASSWORD, META_EMAIL } = process.env;
+const {
+  meta: { email: mail, password },
+} = config;
 
-export const sendVerifyMail = async (code: number, email: string) => {
-  const htmlCode = `<!DOCTYPE html>
-<html>
-  <head>
-    <metacharset="utf-8">
-    <title>Verification code</title>
-  </head>
-  <body>
-    <p>Hello</p>
-    <p>Your verification code: <strong>${code}</strong></p>
-    <p>The code will be valid until: <strong>10 minutes</strong></p>
-    <p>Best regards,</p>
-    <p>Your team</p>
-  </body>
-</html>`;
+// export const sendVerifyMail = async (token: string, email: string) => {
+//   try {
+//     const message = {
+//       to: email,
+//       from: mail,
+//       subject: "E-mail verification",
+//       html: mailMessage(token, email),
+//     };
+//     const transporter = nodemailer.createTransport({
+//       host: "smtp.meta.ua",
+//       port: 465,
+//       secure: true,
+//       auth: {
+//         user: email,
+//         pass: password,
+//       },
+//     });
+//     await transporter.sendMail(message);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
+export const sendVerifyMail = async (
+  verificationToken: string,
+  email: string
+) => {
   try {
     const message = {
+      from: mail,
       to: email,
-      from: META_EMAIL,
-      subject: "Verification code",
-      html: htmlCode,
+      subject: "E-mail verification",
+      html: mailMessage(verificationToken),
     };
-    const transporter = nodemailer.createTransport({
-      host: "smtp.meta.ua",
-      port: 465,
-      secure: true,
+
+    const transport = nodemailer.createTransport({
+      host: "sandbox.smtp.mailtrap.io",
+      port: 2525,
       auth: {
-        user: META_EMAIL,
-        pass: META_PASSWORD,
+        user: "e40a90180eb21a",
+        pass: "0e4731a39c9c3d",
       },
     });
-    await transporter.sendMail(message);
+
+    await transport.sendMail(message);
   } catch (error) {
-    console.log(error);
+    console.error("app error:", error);
   }
 };
