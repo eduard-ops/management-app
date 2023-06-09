@@ -16,8 +16,6 @@ interface AuthRequest extends Request {
   user?: UserI;
 }
 
-Error;
-
 export const auth = async (req: AuthRequest, _, next: NextFunction) => {
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
