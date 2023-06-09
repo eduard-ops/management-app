@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 
 import authRouter from "./routes/api/auth";
 
+import usersRouter from "./routes/api/users";
 
 dotenv.config();
 
@@ -19,11 +20,11 @@ app.get("/", (_, res: Response) => res.send("Hello Docker"));
 
 app.use("/api/auth", authRouter);
 
+app.use("/api/users", usersRouter);
+
 app.use((_, res: Response<{ message: string }>) => {
   res.status(404).json({ message: "Not found" });
 });
-
-
 
 app.use(
   (

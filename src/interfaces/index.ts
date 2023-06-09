@@ -4,8 +4,7 @@ export interface UserI {
   _id: Types.ObjectId;
   email: string;
   password: string;
+  role: "admin" | "boss" | "user";
   accessToken: string | null;
-  refreshToken: string | null;
-  verifyEmail: string | boolean;
-  verificationToken: string;
+  bossId: string | null;
 }

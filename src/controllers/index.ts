@@ -1,3 +1,5 @@
 import { auth } from "./auth";
 
-export { auth };
+import { users } from "./users";
+
+export { auth, users };

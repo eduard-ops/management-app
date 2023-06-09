@@ -4,15 +4,12 @@ import { Response, Request } from "express";
 
 import { checkUserEmail, setTokenUser } from "../../services/auth";
 
-import { createError, generateTokens } from "../../helpers";
+import { createError, generateToken } from "../../helpers";
 
-interface signinUser {
-  email: string;
-  password: string;
-}
+import { signinType } from "../../types";
 
 export const signin = async (
-  req: Request<{}, {}, signinUser>,
+  req: Request<{}, {}, signinType>,
   res: Response
 ) => {
   const { email, password } = req.body;
@@ -25,16 +22,12 @@ export const signin = async (
     throw createError(401, `Email address or password doesn't correct`);
   }
 
-  if (user.verifyEmail === false) {
-    throw createError(403, "Please verify your email");
-  }
-
   const _id = user._id.toString();
-  const { accessToken, refreshToken } = generateTokens(_id);
-  await setTokenUser(_id, accessToken, refreshToken);
+  const accessToken = generateToken(_id);
+  await setTokenUser(_id, accessToken);
   res.json({
     status: "success",
     code: 200,
-    data: { accessToken, refreshToken },
+    data: { accessToken },
   });
 };

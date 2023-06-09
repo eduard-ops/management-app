@@ -4,19 +4,25 @@ import Joi from "joi";
 
 import { UserI } from "../interfaces";
 
+import { signupType, signinType } from "../types";
+
 /* eslint-disable no-useless-escape */
 const emailRegexp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 const passwordRegex =
   /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[\?\.,!_\-~\$%\+=@#\^&])(?=.*?[0-9])\S{8,}$/;
 
-const userSchema = new Schema(
+const userSchema = new Schema<UserI>(
   {
     email: {
       type: String,
       required: [true, "Email is required"],
       unique: true,
       match: emailRegexp,
+    },
+    role: {
+      type: String,
+      enum: ["admin", "boss", "user"],
     },
     password: {
       type: String,
@@ -28,17 +34,8 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
-    refreshToken: {
+    bossId: {
       type: String,
-      default: null,
-    },
-    verifyEmail: {
-      type: Boolean,
-      default: false,
-    },
-    verificationToken: {
-      type: String,
-      required: [true, "Verify token is required"],
       default: null,
     },
   },
@@ -47,7 +44,22 @@ const userSchema = new Schema(
 
 const User = model<UserI>("user", userSchema);
 
-const joiSchemaUser = Joi.object({
+const joiSchemaSignup = Joi.object<signupType>({
+  email: Joi.string()
+    .max(80)
+    .trim()
+    .regex(emailRegexp, "Invalid email address")
+    .required(),
+  password: Joi.string()
+    .min(8)
+    .trim()
+    .regex(passwordRegex, "Password not valid")
+    .required(),
+  role: Joi.string().trim().valid("admin", "boss", "user").required(),
+  bossId: Joi.string().trim(),
+});
+
+const joiSchemaSignin = Joi.object<signinType>({
   email: Joi.string()
     .max(80)
     .trim()
@@ -60,12 +72,4 @@ const joiSchemaUser = Joi.object({
     .required(),
 });
 
-const joiSchemaVerifyEmail = Joi.object({
-  email: Joi.string()
-    .max(80)
-    .trim()
-    .regex(emailRegexp, "Invalid email address")
-    .required(),
-});
-
-export { User, joiSchemaUser, joiSchemaVerifyEmail };
+export { User, joiSchemaSignup, joiSchemaSignin };

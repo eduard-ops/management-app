@@ -1,15 +1,6 @@
 import { signupUser } from "./signupUser";
 import { checkUserEmail } from "./checkUserEmail";
 import { setTokenUser } from "./setTokensUser";
+import { checkUserById } from "./checkUserById";
 
-import { checkVerifyToken } from "./checkVerifyToken";
-
-import { verificationMail } from "./verificationMail";
-
-export {
-  signupUser,
-  checkUserEmail,
-  setTokenUser,
-  checkVerifyToken,
-  verificationMail,
-};
+export { signupUser, checkUserEmail, setTokenUser, checkUserById };
