@@ -6,8 +6,10 @@ import config from "./config";
 
 const {
   database: { DB_HOST },
-  port: PORT = 3000,
+  port,
 } = config;
+
+const PORT = port || 3000;
 
 const startServer = async () => {
   try {
