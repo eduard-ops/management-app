@@ -6,7 +6,7 @@ const {
   jwt: { accessSecret },
 } = config;
 
-export const generateToken = (id: string) => {
+export const generateToken = (id: string): string => {
   const payload = {
     id: id,
   };

@@ -1,6 +1,6 @@
 import { User } from "../../models";
 
-import { UserI } from "../../interfaces";
+import { UserI } from "../../interfaces/user";
 
 export const checkUserEmail = async (
   email: string

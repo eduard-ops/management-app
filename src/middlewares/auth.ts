@@ -1,6 +1,6 @@
-import { NextFunction, Request } from "express";
+import { NextFunction } from "express";
 import { createError } from "../helpers";
-import { UserI } from "../interfaces";
+import { AuthRequest } from "../interfaces/user";
 
 import { checkUserById } from "../services/auth";
 
@@ -11,10 +11,6 @@ import config from "../config";
 const {
   jwt: { accessSecret },
 } = config;
-
-interface AuthRequest extends Request {
-  user?: UserI;
-}
 
 export const auth = async (req: AuthRequest, _, next: NextFunction) => {
   const { authorization = "" } = req.headers;

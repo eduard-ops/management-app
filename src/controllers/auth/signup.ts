@@ -4,13 +4,13 @@ import { Request, Response } from "express";
 
 import { signupUser, checkUserEmail } from "../../services/auth";
 
-import { createError } from "../../helpers";
+import { createError, checkBossId } from "../../helpers";
 
-import { signupType } from "../../types";
+import { signupType, ResponseSignup } from "../../types/auth";
 
 export const signup = async (
   req: Request<{}, {}, signupType>,
-  res: Response
+  res: Response<ResponseSignup>
 ) => {
   const { email, password, role, bossId = null } = req.body;
 
@@ -19,6 +19,11 @@ export const signup = async (
   if (user) {
     throw createError(409, `Email address is already registered`);
   }
+
+  if (bossId) {
+    await checkBossId(bossId);
+  }
+
   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
   const result = await signupUser({
     email,
@@ -28,7 +33,6 @@ export const signup = async (
   });
   res.status(201).json({
     message: "Created",
-    status: 201,
     data: {
       user: {
         email: result?.email,

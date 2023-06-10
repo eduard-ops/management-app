@@ -6,7 +6,7 @@ import { auth } from "../../controllers";
 
 import { validation, ctrlWrapper } from "../../middlewares";
 
-import { joiSchemaSignup, joiSchemaSignin } from "../../models/user";
+import { joiSchemaSignup, joiSchemaSignin } from "../../schemas";
 
 router.post("/signup", validation(joiSchemaSignup), ctrlWrapper(auth.signup));
 

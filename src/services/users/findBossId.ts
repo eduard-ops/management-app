@@ -1,13 +1,12 @@
 import { UserI } from "../../interfaces/user";
 import { User } from "../../models";
-import { Types } from "mongoose";
 
-export const getUserById = async (
-  id: Types.ObjectId
+export const findBossId = async (
+  bossId: string
 ): Promise<UserI | undefined | null> => {
   try {
-    const user = await User.findById(id).select("-password -accessToken");
-    return user;
+    const data = await User.findOne({ role: "boss", _id: bossId });
+    return data;
   } catch (error) {
     console.log(error);
   }

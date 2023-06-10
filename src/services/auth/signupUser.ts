@@ -1,8 +1,8 @@
 import { User } from "../../models";
 
-import { UserI } from "../../interfaces";
+import { UserI } from "../../interfaces/user";
 
-import { signupType } from "../../types";
+import { signupType } from "../../types/auth";
 
 export const signupUser = async <T extends signupType>(
   obj: T

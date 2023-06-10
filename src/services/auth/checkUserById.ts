@@ -1,4 +1,4 @@
-import { UserI } from "../../interfaces";
+import { UserI } from "../../interfaces/user";
 import { User } from "../../models";
 
 export const checkUserById = async (

@@ -6,11 +6,11 @@ import { checkUserEmail, setTokenUser } from "../../services/auth";
 
 import { createError, generateToken } from "../../helpers";
 
-import { signinType } from "../../types";
+import { signinType, ResponseSignin } from "../../types/auth";
 
 export const signin = async (
   req: Request<{}, {}, signinType>,
-  res: Response
+  res: Response<ResponseSignin>
 ) => {
   const { email, password } = req.body;
 
@@ -25,9 +25,8 @@ export const signin = async (
   const _id = user._id.toString();
   const accessToken = generateToken(_id);
   await setTokenUser(_id, accessToken);
-  res.json({
-    status: "success",
-    code: 200,
+  res.status(200).json({
+    message: "Success",
     data: { accessToken },
   });
 };
