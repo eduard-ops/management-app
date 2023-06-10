@@ -30,12 +30,16 @@ export const auth = async (req: AuthRequest, _, next: NextFunction) => {
     }
     req.user = user;
     next();
-  } catch (error: unknown) {
+  } catch (error) {
     if (error instanceof Error) {
-      if (error.message === "invalid signature") {
+      if (
+        error.message === "invalid signature" ||
+        error.message === "jwt expired"
+      ) {
         error["status"] = 401;
       }
     }
+
     next(error);
   }
 };

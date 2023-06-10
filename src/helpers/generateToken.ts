@@ -12,7 +12,7 @@ export const generateToken = (id: string) => {
   };
 
   const accessToken = jwt.sign(payload, `${accessSecret}`, {
-    expiresIn: "3h",
+    expiresIn: "2h",
   });
 
   return accessToken;
