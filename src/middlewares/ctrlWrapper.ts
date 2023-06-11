@@ -1,8 +1,13 @@
-import { RequestHandler } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
+import { AuthRequest } from "../interfaces/user";
 
-export const ctrlWrapper = <T extends RequestHandler>(
-  ctrl: T
-): RequestHandler => {
+type Controller = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => Promise<void>;
+
+export const ctrlWrapper = (ctrl: Controller): RequestHandler => {
   const func: RequestHandler = async (req, res, next) => {
     try {
       await ctrl(req, res, next);

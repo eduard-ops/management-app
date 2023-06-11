@@ -1,6 +1,6 @@
-import { NextFunction } from "express";
+import { NextFunction, RequestHandler } from "express";
 import { createError } from "../helpers";
-import { AuthRequest } from "../interfaces/user";
+import { AuthRequest, UserI } from "../interfaces/user";
 
 import { checkUserById } from "../services/auth";
 

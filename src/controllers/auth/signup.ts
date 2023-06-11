@@ -4,9 +4,11 @@ import { Request, Response } from "express";
 
 import { signupUser, checkUserEmail } from "../../services/auth";
 
-import { createError, checkBossId } from "../../helpers";
+import { createError, checkMongoId } from "../../helpers";
 
 import { signupType, ResponseSignup } from "../../types/auth";
+
+import { findUsersIdBoss } from "../../services/users";
 
 export const signup = async (
   req: Request<{}, {}, signupType>,
@@ -21,7 +23,13 @@ export const signup = async (
   }
 
   if (bossId) {
-    await checkBossId(bossId);
+    checkMongoId(bossId, 400, "Invalid bossId");
+    const check = await findUsersIdBoss(bossId);
+    console.log(check);
+    check ||
+      (() => {
+        throw createError(404, `Boss with id=${bossId} not found`);
+      })();
   }
 
   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));

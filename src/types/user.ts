@@ -2,4 +2,6 @@ import { UserI, subordinatesI } from "../interfaces/user";
 
 type ResponseGetUsers = UserI | UserI[] | subordinatesI[] | null | undefined;
 
-export type { ResponseGetUsers };
+type ResponseUpdateBoss = UserI | null | undefined;
+
+export type { ResponseGetUsers, ResponseUpdateBoss };

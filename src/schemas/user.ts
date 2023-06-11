@@ -44,4 +44,9 @@ const joiSchemaSignin = Joi.object<signinType>({
     .required(),
 });
 
-export { joiSchemaSignin, joiSchemaSignup };
+const joiSchemaChangeBossId = Joi.object({
+  subId: Joi.string().trim().required(),
+  newBossId: Joi.string().trim(),
+});
+
+export { joiSchemaSignin, joiSchemaSignup, joiSchemaChangeBossId };
