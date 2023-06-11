@@ -1,0 +1,219 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Management-App",
+    "version": "v1"
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [
+    {
+      "url": "http://localhost:4000/api"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "Users"
+    }
+  ],
+
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "summary": "Create user",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "description": "Created user object",
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/definitions/signupRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/definitions/emailResponses" }
+              }
+            }
+          },
+          "409": { "description": "Email address is already registered" },
+          "400": { "description": "Invalid bossId" },
+          "404": { "description": "Boss with this id not found" }
+        }
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "summary": "Logs user into the system",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "description": "object with email and password",
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/definitions/loginRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Email address or password doesn't correct"
+          }
+        }
+      }
+    },
+    "/auth/signout": {
+      "get": {
+        "summary": "Logs out current logged in user session",
+        "tags": ["Auth"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "204": {
+            "description": "successful operation"
+          },
+          "401": { "description": "Not authorized or token invalid" }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Get all users",
+        "tags": ["Users"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/definitions/getAllUsersUsesRes" }
+              }
+            }
+          },
+          "401": { "description": "Not authorized or token invalid" }
+        }
+      },
+      "patch": {
+        "summary": "Update BossId",
+        "tags": ["Users"],
+        "requestBody": {
+          "required": true,
+          "description": "Update BossId",
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/definitions/UpdateBossReq" }
+            }
+          }
+        },
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/definitions/UpdateBoss" }
+              }
+            }
+          },
+          "401": { "description": "Not authorized or token invalid" },
+          "ErrorRole": {
+            "description": "Only a user with the boss role can change the boss"
+          },
+          "ValidError": {
+            "description": "Invalid subId or newBossId"
+          },
+          "ErrorSubordinates": {
+            "description": "This boss has not subordinates"
+          },
+          "ErrorSub": {
+            "description": "User with id subId is not a subordinate of this boss"
+          },
+          "NotFound": {
+            "description": "New boss id not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "signupRequest": {
+      "type": "object",
+      "required": ["email", "password", "role"],
+      "properties": {
+        "email": { "type": "string", "format": "email" },
+        "password": { "type": "string" },
+        "role": { "type": "string" },
+        "bossId": { "type": "string" }
+      }
+    },
+    "loginRequest": {
+      "type": "object",
+      "required": ["email", "password"],
+      "properties": {
+        "email": { "type": "string", "format": "email" },
+        "password": { "type": "string" }
+      }
+    },
+    "emailResponses": {
+      "type": "object",
+      "required": ["email"],
+      "properties": {
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string" }
+      }
+    },
+    "getAllUsersUsesRes": {
+      "type": "object",
+      "properties": {
+        "_id": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string" },
+        "bossId": { "type": "string" }
+      }
+    },
+    "UpdateBoss": {
+      "type": "object",
+      "properties": {
+        "_id": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string" },
+        "bossId": { "type": "string" }
+      }
+    },
+    "UpdateBossReq": {
+      "type": "object",
+      "required": ["subId", "newBossId"],
+      "properties": {
+        "subId": { "type": "string" },
+        "newBossId": { "type": "string" }
+      }
+    }
+  },
+
+  "components": {
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

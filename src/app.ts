@@ -6,13 +6,17 @@ import authRouter from "./routes/api/auth";
 
 import usersRouter from "./routes/api/users";
 
+import swaggerUi from "swagger-ui-express";
+
+import swaggerDocument from "./swagger.json";
+
 const app = express();
 
 app.use(cors());
 
 app.use(express.json());
 
-app.get("/", (_, res: Response) => res.send("Hello Docker"));
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use("/api/auth", authRouter);
 
